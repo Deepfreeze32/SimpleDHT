@@ -65,6 +65,9 @@ public class DHTClient {
             }
 
             String output = in.readLine();
+            if (output == null) {
+                break;
+            }
             if (userInput.contains("article")) {
                 if (output.contains("FAIL:")) {
                     String node = output.substring(7);
