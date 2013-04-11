@@ -105,8 +105,9 @@ public class DHTNode extends Thread {
                     continue;
                 }
                 System.out.println("Received: " + clientMessage);
-                if (clientMessage.toLowerCase().equals("shutdown")) {
+                if (clientMessage.contains("shutdown")) {
                     out.println("goodbye");
+                    System.exit(0);
                     break;
                 } else if (clientMessage.toLowerCase().equals("keyval")) {
                     out.println(keyVal);
