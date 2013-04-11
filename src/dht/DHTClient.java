@@ -25,20 +25,14 @@ public class DHTClient {
      */
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
-        String job = args[0];
-        boolean server = job.equals("server");
-        if (args.length < 2) {
+        
+        if (args.length != 1) {
             System.err.println("Usage: <host>");
             System.exit(1);
-        } else if (!server && args.length < 3) {
-            System.err.println("Usage: <host>");
-            System.exit(1);
-        }
+        } 
 
-        String serverHostname = "localhost";
-        if (args.length > 2) {
-            serverHostname = args[2];
-        }
+        String serverHostname = args[0];
+        
         System.out.println("Attemping to connect to host " + serverHostname + " on port "+port);
 
         Socket echoSocket = null;

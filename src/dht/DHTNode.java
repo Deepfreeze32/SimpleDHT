@@ -139,6 +139,8 @@ public class DHTNode extends Thread {
                 } else {
                     outToClient.writeBytes("Key Value is: " + key);
                 }
+            } else {
+                outToClient.writeBytes("Invalid command");
             }
         }
         return true;
