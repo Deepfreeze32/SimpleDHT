@@ -73,7 +73,7 @@ public class DHTNode extends Thread {
             Logger.getLogger(DHTNode.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println("Problem getting hostname.");
             System.exit(1);
-        } 
+        }
         start();
     }
 
@@ -81,26 +81,26 @@ public class DHTNode extends Thread {
     @Override
     public void run() {
         try {
-            PrintWriter out = new PrintWriter(socket.getOutputStream(),true); 
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())); 
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String clientMessage;
             boolean inserting = false;
             int insertingKey = 0;
-            
+
             while ((clientMessage = in.readLine()) != null) {
                 if (inserting) {
-                    File file = new File("/home/dht/const/"+insertingKey+".txt");
- 
+                    File file = new File("/home/dht/const/" + insertingKey + ".txt");
+
                     // if file doesnt exists, then create it
                     if (!file.exists()) {
-                            file.createNewFile();
+                        file.createNewFile();
                     }
 
                     FileWriter fw = new FileWriter(file.getAbsoluteFile());
                     BufferedWriter bw = new BufferedWriter(fw);
                     bw.write(clientMessage);
                     bw.close();
-                    
+
                     inserting = false;
                     insertingKey = 0;
                     continue;
@@ -128,9 +128,14 @@ public class DHTNode extends Thread {
                         System.out.println("It's ours!");
                         //out.println(key);
                         //Get file info...somehow
-                        BufferedReader br = new BufferedReader(new FileReader("/home/dht/const/"+key+".txt"));
-                        String file = br.readLine();
-                        out.println(file);
+                        BufferedReader br = new BufferedReader(new FileReader("/home/dht/const/" + key + ".txt"));
+                        //String file = br.readLine();
+
+                        String str;
+                        while ((str = br.readLine()) != null) // reading line-by-line from file
+                        {
+                            out.println(str);         // sending each line to client
+                        }
 
                         //continue;
                     }
