@@ -35,6 +35,17 @@ public class DHTClient {
         
         System.out.println("Attemping to connect to host " + serverHostname + " on port "+port);
 
+        while (true) {
+            String next = connect(serverHostname);
+            if (next == null) {
+                break;
+            }
+            serverHostname  = next;
+        }
+    }
+    
+    public static String connect(String serverHostname) throws IOException {
+        String nextHost  = null;
         Socket echoSocket = null;
         PrintWriter out = null;
         BufferedReader in = null;
@@ -71,10 +82,12 @@ public class DHTClient {
             }
             if (userInput.contains("article")) {
                 if (output.contains("FAIL:")) {
-                    String node = output.substring(7);
+                    String node = output.substring(6);
                     System.out.println("Error: Try node: "+node);
+                    nextHost = node;
                 } else {
                     System.out.println(output);
+                    nextHost = null;
                 }
             } else {
                 System.out.println("Response: " + output);
@@ -85,5 +98,6 @@ public class DHTClient {
         in.close();
         stdIn.close();
         echoSocket.close();
+        return nextHost;
     }
 }
