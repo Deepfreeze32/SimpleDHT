@@ -60,7 +60,6 @@ public class DHTNode extends Thread {
         keylist.load(DHTNode.class.getClassLoader().getResourceAsStream("/home/dht/props/keylist.properties"));
         try {
             self = java.net.InetAddress.getLocalHost().getHostName();
-
             nextNode = prop.getProperty("NEXT");
             keyVal = Integer.parseInt(prop.getProperty("KEY"));
             accept = new ServerSocket(DHTNode.port);

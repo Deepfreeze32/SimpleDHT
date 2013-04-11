@@ -19,6 +19,7 @@ import java.util.logging.Logger;
  */
 public class DHTClient {
 
+    private static final int port = 1138;
     /**
      * @param args the command line arguments
      */
@@ -27,19 +28,18 @@ public class DHTClient {
         String job = args[0];
         boolean server = job.equals("server");
         if (args.length < 2) {
-            System.err.println("Usage: <server> <port> \n      | <client> <host> <port> ");
+            System.err.println("Usage: <host>");
             System.exit(1);
         } else if (!server && args.length < 3) {
-            System.err.println("Usage: <server> <port> \n      | <client> <host> <port> ");
+            System.err.println("Usage: <host>");
             System.exit(1);
         }
 
         String serverHostname = "localhost";
-        int port = Integer.parseInt(args[1]);
         if (args.length > 2) {
             serverHostname = args[2];
         }
-        System.out.println("Attemping to connect to host " + serverHostname + " on port 10008.");
+        System.out.println("Attemping to connect to host " + serverHostname + " on port "+port);
 
         Socket echoSocket = null;
         PrintWriter out = null;
