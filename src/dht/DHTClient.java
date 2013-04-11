@@ -66,6 +66,7 @@ public class DHTClient {
 
             String output = in.readLine();
             if (output == null) {
+                System.out.println("Null response recived. Terminating");
                 break;
             }
             if (userInput.contains("article")) {
