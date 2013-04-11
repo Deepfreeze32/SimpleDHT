@@ -62,8 +62,8 @@ public class DHTNode extends Thread {
         try {
             self = java.net.InetAddress.getLocalHost().getHostName();
             nextNode = prop.getProperty("NEXT");
-            System.out.println(prop.getProperty("KEY"));
-            keyVal = Integer.parseInt(prop.getProperty("KEY"));
+            System.out.println(prop.getProperty("KEYVAL"));
+            keyVal = Integer.parseInt(prop.getProperty("KEYVAL"));
             accept = new ServerSocket(DHTNode.port);
         } catch (UnknownHostException ex) {
             Logger.getLogger(DHTNode.class.getName()).log(Level.SEVERE, null, ex);
