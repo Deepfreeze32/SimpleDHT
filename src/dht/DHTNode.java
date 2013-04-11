@@ -75,9 +75,9 @@ public class DHTNode extends Thread {
     @Override
     public void run() {
         try {
+            BufferedReader inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            DataOutputStream outToClient = new DataOutputStream(socket.getOutputStream());
             while (true) {
-                BufferedReader inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                DataOutputStream outToClient = new DataOutputStream(socket.getOutputStream());
                 String clientMessage = inFromClient.readLine();
                 System.out.println("Received: " + clientMessage);
                 if (clientMessage.toLowerCase().equals("shutdown")) {
