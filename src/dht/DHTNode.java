@@ -77,8 +77,9 @@ public class DHTNode extends Thread {
         try {
             BufferedReader inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             DataOutputStream outToClient = new DataOutputStream(socket.getOutputStream());
-            while (true) {
-                String clientMessage = inFromClient.readLine();
+            String clientMessage;
+            while ((clientMessage = inFromClient.readLine()) != null) {
+                
                 System.out.println("Received: " + clientMessage);
                 if (clientMessage.toLowerCase().equals("shutdown")) {
                     outToClient.writeBytes("goodbye");
