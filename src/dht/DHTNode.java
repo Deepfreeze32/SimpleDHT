@@ -20,6 +20,9 @@ import java.io.StringReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -132,15 +135,7 @@ public class DHTNode extends Thread {
                         //String file = br.readLine();
                         String fname = "/home/dht/const/" + key + ".txt";
                         System.out.println(fname);
-                        FileInputStream fis = new FileInputStream(fname);
-                        int x = 0;
-                        while (true) {
-                            x = fis.read();
-                            if (x == -1) {
-                                break;
-                            }
-                            out.write(x);
-                        }
+                        out.write(readFile(fname));
                         out.close();
 
                         //continue;
@@ -176,6 +171,18 @@ public class DHTNode extends Thread {
                 // not much can be done: log the error
                 ex.printStackTrace();
             }
+        }
+    }
+
+    private static String readFile(String path) throws IOException {
+        FileInputStream stream = new FileInputStream(new File(path));
+        try {
+            FileChannel fc = stream.getChannel();
+            MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
+            /* Instead of using default, pass in a decoder. */
+            return Charset.defaultCharset().decode(bb).toString();
+        } finally {
+            stream.close();
         }
     }
 }
