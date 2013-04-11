@@ -88,14 +88,16 @@ public class DHTNode extends Thread {
                     break;
                 } else if (clientMessage.contains("article")) {
                     String request = clientMessage.substring(8);
-                    System.out.println(request);
+                    //System.out.println(request);
                     int req = Integer.parseInt(request);
-                    System.out.println(req);
+                    //System.out.println(req);
                     int key = Integer.parseInt(keylist.getProperty("" + req));
                     System.out.println(key);
                     if (key > keyVal) {
+                        System.out.println("Failed.");
                         outToClient.writeBytes("FAIL: " + nextNode);
                     } else {
+                        System.out.println("It's ours!");
                         outToClient.writeBytes("Key Value is: " + key);
                     }
                 }
