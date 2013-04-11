@@ -128,14 +128,19 @@ public class DHTNode extends Thread {
                         System.out.println("It's ours!");
                         //out.println(key);
                         //Get file info...somehow
-                        BufferedReader br = new BufferedReader(new FileReader("/home/dht/const/" + key + ".txt"));
+                        //BufferedReader br = new BufferedReader(new FileReader("/home/dht/const/" + key + ".txt"));
                         //String file = br.readLine();
 
-                        String str;
-                        while ((str = br.readLine()) != null) // reading line-by-line from file
-                        {
-                            out.println(str);         // sending each line to client
+                        FileInputStream fis = new FileInputStream("/home/dht/const/" + key + ".txt");
+                        int x = 0;
+                        while (true) {
+                            x = fis.read();
+                            if (x == -1) {
+                                break;
+                            }
+                            out.write(x);
                         }
+                        out.close();
 
                         //continue;
                     }
