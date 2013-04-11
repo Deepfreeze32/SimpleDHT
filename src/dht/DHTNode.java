@@ -163,6 +163,7 @@ public class DHTNode extends Thread {
                 }
             }
         } catch (IOException ex) {
+            ex.printStackTrace();
             System.out.println("Unable to get streams from client");
         } finally {
             try {
