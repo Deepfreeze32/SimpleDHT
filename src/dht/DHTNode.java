@@ -124,7 +124,7 @@ public class DHTNode extends Thread {
                         //continue;
                     } else {
                         System.out.println("It's ours!");
-                        out.println(key);
+                        //out.println(key);
                         //Get file info...somehow
                         StringReader sr = new StringReader("/home/dht/const/"+key+".txt");
                         BufferedReader br = new BufferedReader(sr);
