@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -75,18 +76,18 @@ public class DHTNode extends Thread {
     @Override
     public void run() {
         try {
-            BufferedReader inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            DataOutputStream outToClient = new DataOutputStream(socket.getOutputStream());
+            PrintWriter out = new PrintWriter(socket.getOutputStream(),true); 
+         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())); 
             String clientMessage;
-            while ((clientMessage = inFromClient.readLine()) != null) {
+            while ((clientMessage = in.readLine()) != null) {
                 
                 System.out.println("Received: " + clientMessage);
                 if (clientMessage.toLowerCase().equals("shutdown")) {
-                    outToClient.writeBytes("goodbye");
+                    out.println("goodbye");
                     break;
                 } else if (clientMessage.toLowerCase().equals("keyval")) {
-                    outToClient.writeBytes(Integer.toString(keyVal));
-                    break;
+                    out.println(keyVal);
+                    //break;
                 } else if (clientMessage.contains("article")) {
                     String request = clientMessage.substring(8);
                     //System.out.println(request);
@@ -96,12 +97,12 @@ public class DHTNode extends Thread {
                     System.out.println(key);
                     if (key > keyVal) {
                         System.out.println("Failed.");
-                        outToClient.writeBytes("FAIL: " + nextNode);
-                        continue;
+                        out.println("FAIL: " + nextNode);
+                        //continue;
                     } else {
                         System.out.println("It's ours!");
-                        outToClient.writeBytes(Integer.toString(key));
-                        continue;
+                        out.println(key);
+                        //continue;
                     }
                 }
             }
