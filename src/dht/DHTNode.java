@@ -74,8 +74,6 @@ public class DHTNode extends Thread {
     // the server services client requests in the run method
     @Override
     public void run() {
-        InputStream in = null;
-        OutputStream out = null;
         try {
             while (true) {
                 BufferedReader inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -103,8 +101,6 @@ public class DHTNode extends Thread {
             System.out.println("Unable to get streams from client");
         } finally {
             try {
-                in.close();
-                out.close();
                 socket.close();
             } catch (IOException ex) {
                 // not much can be done: log the error
