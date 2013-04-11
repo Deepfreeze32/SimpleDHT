@@ -28,7 +28,6 @@ public class DHTNode extends Thread {
     private static String nextNode;
     private static final int port = 1138;
     private static int keyVal;
-    private ServerSocket accept;
     private static Properties keylist;
     public static final int PORT_NUMBER = 1138;
     protected Socket socket;
@@ -64,7 +63,6 @@ public class DHTNode extends Thread {
             nextNode = prop.getProperty("NEXT");
             System.out.println(prop.getProperty("KEYVAL"));
             keyVal = Integer.parseInt(prop.getProperty("KEYVAL"));
-            accept = new ServerSocket(DHTNode.port);
         } catch (UnknownHostException ex) {
             Logger.getLogger(DHTNode.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println("Problem getting hostname.");
@@ -116,35 +114,5 @@ public class DHTNode extends Thread {
                 // not much can be done: log the error
             }
         }
-    }
-
-    public boolean listen() throws IOException {
-        Socket connectionSocket = accept.accept();
-        while (true) {
-            BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-            DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
-            String clientMessage = inFromClient.readLine();
-            System.out.println("Received: " + clientMessage);
-            if (clientMessage.toLowerCase().equals("shutdown")) {
-                outToClient.writeBytes("goodbye");
-                connectionSocket.close();
-                break;
-            } else if (clientMessage.toLowerCase().equals("keyval")) {
-                outToClient.writeBytes(Integer.toString(keyVal));
-                break;
-            } else if (clientMessage.contains("article")) {
-                String request = clientMessage.substring(8);
-                int req = Integer.parseInt(request);
-                int key = Integer.parseInt(keylist.getProperty("" + req));
-                if (key > keyVal) {
-                    outToClient.writeBytes("FAIL: " + nextNode);
-                } else {
-                    outToClient.writeBytes("Key Value is: " + key);
-                }
-            } else {
-                outToClient.writeBytes("Invalid command");
-            }
-        }
-        return true;
     }
 }
