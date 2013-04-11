@@ -5,8 +5,11 @@
 package dht;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -77,10 +80,29 @@ public class DHTNode extends Thread {
     public void run() {
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(),true); 
-         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())); 
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())); 
             String clientMessage;
+            boolean inserting = false;
+            int insertingKey = 0;
+            
             while ((clientMessage = in.readLine()) != null) {
-                
+                if (inserting) {
+                    File file = new File("/home/dht/const/"+insertingKey+".txt");
+ 
+                    // if file doesnt exists, then create it
+                    if (!file.exists()) {
+                            file.createNewFile();
+                    }
+
+                    FileWriter fw = new FileWriter(file.getAbsoluteFile());
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    bw.write(clientMessage);
+                    bw.close();
+                    
+                    inserting = false;
+                    insertingKey = 0;
+                    continue;
+                }
                 System.out.println("Received: " + clientMessage);
                 if (clientMessage.toLowerCase().equals("shutdown")) {
                     out.println("goodbye");
@@ -102,8 +124,30 @@ public class DHTNode extends Thread {
                     } else {
                         System.out.println("It's ours!");
                         out.println(key);
+                        //Get file info...somehow
+                        
                         //continue;
                     }
+                } else if (clientMessage.contains("insert")) {
+                    String request = clientMessage.substring(8);
+                    //System.out.println(request);
+                    int req = Integer.parseInt(request);
+                    //System.out.println(req);
+                    int key = Integer.parseInt(keylist.getProperty("" + req));
+                    System.out.println(key);
+                    if (key > keyVal) {
+                        System.out.println("Failed.");
+                        out.println("FAIL: " + nextNode);
+                        //continue;
+                    } else {
+                        System.out.println("It's ours!");
+                        out.println(key);
+                        insertingKey = key;
+                        inserting = true;
+                        //continue;
+                    }
+                } else {
+                    out.println("Unrecognized command.");
                 }
             }
         } catch (IOException ex) {
