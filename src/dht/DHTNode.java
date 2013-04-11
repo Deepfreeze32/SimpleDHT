@@ -97,9 +97,11 @@ public class DHTNode extends Thread {
                     if (key > keyVal) {
                         System.out.println("Failed.");
                         outToClient.writeBytes("FAIL: " + nextNode);
+                        continue;
                     } else {
                         System.out.println("It's ours!");
                         outToClient.writeBytes(Integer.toString(key));
+                        continue;
                     }
                 }
             }
