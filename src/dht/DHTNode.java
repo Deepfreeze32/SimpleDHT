@@ -6,6 +6,7 @@ package dht;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -56,8 +57,8 @@ public class DHTNode extends Thread {
         this.socket = socket;
         Properties prop = new Properties();
         keylist = new Properties();
-        prop.load(DHTNode.class.getClassLoader().getResourceAsStream("/home/dht/props/config.properties"));
-        keylist.load(DHTNode.class.getClassLoader().getResourceAsStream("/home/dht/props/keylist.properties"));
+        prop.load(new FileInputStream("/home/dht/props/config.properties"));
+        keylist.load(new FileInputStream("/home/dht/props/keylist.properties"));
         try {
             self = java.net.InetAddress.getLocalHost().getHostName();
             nextNode = prop.getProperty("NEXT");
