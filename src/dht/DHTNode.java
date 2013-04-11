@@ -67,11 +67,7 @@ public class DHTNode extends Thread {
             Logger.getLogger(DHTNode.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println("Problem getting hostname.");
             System.exit(1);
-        } catch (IOException ex) {
-            Logger.getLogger(DHTNode.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println("Problem opening properties file.");
-            System.exit(1);
-        }
+        } 
         start();
     }
 
@@ -112,6 +108,7 @@ public class DHTNode extends Thread {
                 socket.close();
             } catch (IOException ex) {
                 // not much can be done: log the error
+                ex.printStackTrace();
             }
         }
     }
