@@ -130,8 +130,9 @@ public class DHTNode extends Thread {
                         //Get file info...somehow
                         //BufferedReader br = new BufferedReader(new FileReader("/home/dht/const/" + key + ".txt"));
                         //String file = br.readLine();
-
-                        FileInputStream fis = new FileInputStream("/home/dht/const/" + key + ".txt");
+                        String fname = "/home/dht/const/" + key + ".txt";
+                        System.out.println(fname);
+                        FileInputStream fis = new FileInputStream(fname);
                         int x = 0;
                         while (true) {
                             x = fis.read();
