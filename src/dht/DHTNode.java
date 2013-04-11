@@ -9,6 +9,7 @@ import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -127,8 +128,7 @@ public class DHTNode extends Thread {
                         System.out.println("It's ours!");
                         //out.println(key);
                         //Get file info...somehow
-                        StringReader sr = new StringReader("/home/dht/const/"+key+".txt");
-                        BufferedReader br = new BufferedReader(sr);
+                        BufferedReader br = new BufferedReader(new FileReader("/home/dht/const/"+key+".txt"));
                         String file = br.readLine();
                         out.println(file);
 
