@@ -65,6 +65,7 @@ public class DHTClient {
             System.err.println("Don't know about host: " + serverHostname);
             System.exit(1);
         } catch (IOException e) {
+            e.printStackTrace();
             System.err.println("Couldn't get I/O for " + "the connection to: " + serverHostname);
             System.exit(1);
         }
