@@ -49,6 +49,7 @@ public class DHTNode extends Thread {
                 DHTNode forked = new DHTNode(server.accept());
             }
         } catch (IOException ex) {
+            ex.printStackTrace();
             System.out.println("Unable to start server or accept connections");
             System.exit(1);
         } finally {
