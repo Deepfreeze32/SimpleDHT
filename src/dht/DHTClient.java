@@ -5,11 +5,17 @@
 package dht;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -86,16 +92,23 @@ public class DHTClient {
                     String node = output.substring(6);
                     System.out.println("Error: Try node: " + node);
                     nextHost = node;
+                    break;
                 } else {
+                    String request = userInput.substring(8);
+                    //System.out.println(request);
+                    int req = Integer.parseInt(request);
+                    FileOutputStream fos = new FileOutputStream("article" + req + ".txt");
                     int x = 0;
                     while (true) {
                         x = in.read();
                         if (x == -1) {
                             break;
                         }
-                        System.out.println(x);
+                        fos.write(x);
                     }
-                    System.out.println(output);
+                    System.out.println("Wrote to file article" + req + ".txt");
+                    System.out.println("Contents of file:\n"+readFile("article" + req + ".txt"));
+
                     nextHost = null;
                 }
             } else {
@@ -108,5 +121,17 @@ public class DHTClient {
         stdIn.close();
         echoSocket.close();
         return nextHost;
+    }
+
+    private static String readFile(String path) throws IOException {
+        FileInputStream stream = new FileInputStream(new File(path));
+        try {
+            FileChannel fc = stream.getChannel();
+            MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
+            /* Instead of using default, pass in a decoder. */
+            return Charset.defaultCharset().decode(bb).toString();
+        } finally {
+            stream.close();
+        }
     }
 }
