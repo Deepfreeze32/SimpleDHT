@@ -65,8 +65,8 @@ public class DHTNode extends Thread {
         this.socket = socket;
         Properties prop = new Properties();
         keylist = new Properties();
-        prop.load(new FileInputStream("/home/dht/props/config.properties"));
-        keylist.load(new FileInputStream("/home/dht/props/keylist.properties"));
+        prop.load(new FileInputStream("/home/tcc10a/props/config.properties"));
+        keylist.load(new FileInputStream("/home/tcc10a/props/keylist.properties"));
         try {
             self = java.net.InetAddress.getLocalHost().getHostName();
             nextNode = prop.getProperty("NEXT");
@@ -92,7 +92,7 @@ public class DHTNode extends Thread {
 
             while ((clientMessage = in.readLine()) != null) {
                 if (inserting) {
-                    File file = new File("/home/dht/const/" + insertingKey + ".txt");
+                    File file = new File("/home/home/const/" + insertingKey + ".txt");
 
                     // if file doesnt exists, then create it
                     if (!file.exists()) {
@@ -133,7 +133,7 @@ public class DHTNode extends Thread {
                         //Get file info...somehow
                         //BufferedReader br = new BufferedReader(new FileReader("/home/dht/const/" + key + ".txt"));
                         //String file = br.readLine();
-                        String fname = "/home/dht/const/" + key + ".txt";
+                        String fname = "/home/tcc10a/const/" + key + ".txt";
                         System.out.println(fname);
                         FileInputStream fis = new FileInputStream(fname);
                         int x = 0;
