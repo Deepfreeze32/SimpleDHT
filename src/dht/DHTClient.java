@@ -20,32 +20,33 @@ import java.util.logging.Logger;
 public class DHTClient {
 
     private static final int port = 1138;
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
-        
+
         if (args.length != 1) {
             System.err.println("Usage: <host>");
             System.exit(1);
-        } 
+        }
 
         String serverHostname = args[0];
-        
-        System.out.println("Attemping to connect to host " + serverHostname + " on port "+port);
+
+        System.out.println("Attemping to connect to host " + serverHostname + " on port " + port);
 
         while (true) {
             String next = connect(serverHostname);
             if (next == null) {
                 break;
             }
-            serverHostname  = next;
+            serverHostname = next;
         }
     }
-    
+
     public static String connect(String serverHostname) throws IOException {
-        String nextHost  = null;
+        String nextHost = null;
         Socket echoSocket = null;
         PrintWriter out = null;
         BufferedReader in = null;
@@ -83,9 +84,17 @@ public class DHTClient {
             if (userInput.contains("article")) {
                 if (output.contains("FAIL:")) {
                     String node = output.substring(6);
-                    System.out.println("Error: Try node: "+node);
+                    System.out.println("Error: Try node: " + node);
                     nextHost = node;
                 } else {
+                    int x = 0;
+                    while (true) {
+                        x = in.read();
+                        if (x == -1) {
+                            break;
+                        }
+                        System.out.println(x);
+                    }
                     System.out.println(output);
                     nextHost = null;
                 }

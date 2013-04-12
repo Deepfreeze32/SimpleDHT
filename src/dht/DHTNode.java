@@ -135,7 +135,15 @@ public class DHTNode extends Thread {
                         //String file = br.readLine();
                         String fname = "/home/dht/const/" + key + ".txt";
                         System.out.println(fname);
-                        out.write(readFile(fname));
+                        FileInputStream fis = new FileInputStream(fname);
+                        int x = 0;
+                        while (true) {
+                            x = fis.read();
+                            if (x == -1) {
+                                break;
+                            }
+                            out.write(x);
+                        }
                         out.close();
 
                         //continue;
@@ -163,7 +171,6 @@ public class DHTNode extends Thread {
                 }
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
             System.out.println("Unable to get streams from client");
         } finally {
             try {
