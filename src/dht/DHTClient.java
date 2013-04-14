@@ -110,6 +110,7 @@ public class DHTClient {
                         }
                         fos.write(x);
                     }
+                    fos.close();
                     System.out.println("Wrote to file article" + req + ".txt");
                     System.out.println("Contents of file:\n"+readFile("article" + req + ".txt"));
 

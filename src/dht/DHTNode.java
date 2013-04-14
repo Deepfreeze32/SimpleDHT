@@ -147,8 +147,9 @@ public class DHTNode extends Thread {
                             out.write(x);
                             out.flush();
                         }
+                        fis.close();
                         //out.println();
-                        //out.close();
+                        out.flush();
                         //out = new PrintWriter(socket.getOutputStream(), true);
                         //break;
                         //continue;
