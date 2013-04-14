@@ -146,8 +146,8 @@ public class DHTNode extends Thread {
                             }
                             out.write(x);
                         }
-                        out.close();
-                        break;
+                        out.flush();
+                        //break;
                         //continue;
                     }
                 } else if (clientMessage.contains("insert")) {
