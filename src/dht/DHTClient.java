@@ -119,7 +119,7 @@ public class DHTClient {
 
         out.close();
         in.close();
-        stdIn.close();
+        //stdIn.close();
         echoSocket.close();
         return nextHost;
     }

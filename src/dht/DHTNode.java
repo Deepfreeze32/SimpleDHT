@@ -78,6 +78,7 @@ public class DHTNode extends Thread {
             System.err.println("Problem getting hostname.");
             System.exit(1);
         }
+        //fork the process
         start();
     }
 
@@ -172,6 +173,7 @@ public class DHTNode extends Thread {
                 }
             }
         } catch (IOException ex) {
+            ex.printStackTrace();
             System.out.println("Unable to get streams from client");
         } finally {
             try {
