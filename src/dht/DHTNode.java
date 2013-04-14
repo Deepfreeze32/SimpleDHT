@@ -145,6 +145,7 @@ public class DHTNode extends Thread {
                                 break;
                             }
                             out.write(x);
+                            out.flush();
                         }
                         out.flush();
                         //break;
