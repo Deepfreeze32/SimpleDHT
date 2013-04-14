@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.ServerSocket;
@@ -86,7 +87,9 @@ public class DHTNode extends Thread {
     @Override
     public void run() {
         try {
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            OutputStreamWriter ow = new OutputStreamWriter(socket.getOutputStream());
+            BufferedWriter out = new BufferedWriter(ow);
+            //PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String clientMessage;
             boolean inserting = false;
@@ -112,11 +115,14 @@ public class DHTNode extends Thread {
                 }
                 System.out.println("Received: " + clientMessage);
                 if (clientMessage.contains("shutdown")) {
-                    out.println("goodbye");
+                    out.write("goodbye");
+                    out.flush();
+                    out.close();
                     System.exit(0);
                     break;
                 } else if (clientMessage.toLowerCase().equals("keyval")) {
-                    out.println(keyVal);
+                    out.write(keyVal);
+                    out.flush();
                     //break;
                 } else if (clientMessage.contains("article")) {
                     String request = clientMessage.substring(8);
@@ -127,7 +133,8 @@ public class DHTNode extends Thread {
                     System.out.println(key);
                     if (key > keyVal) {
                         System.out.println("Failed.");
-                        out.println("FAIL: " + nextNode);
+                        out.write("FAIL: " + nextNode);
+                        out.flush();
                         //continue;
                     } else {
                         System.out.println("It's ours!");
@@ -163,17 +170,20 @@ public class DHTNode extends Thread {
                     System.out.println(key);
                     if (key > keyVal) {
                         System.out.println("Failed.");
-                        out.println("FAIL: " + nextNode);
+                        out.write("FAIL: " + nextNode);
+                        out.flush();
                         //continue;
                     } else {
                         System.out.println("It's ours!");
-                        out.println(key);
+                        out.write(key);
+                        out.flush();
                         insertingKey = key;
                         inserting = true;
                         //continue;
                     }
                 } else {
-                    out.println("Unrecognized command.");
+                    out.write("Unrecognized command.");
+                    out.flush();
                 }
             }
         } catch (IOException ex) {
