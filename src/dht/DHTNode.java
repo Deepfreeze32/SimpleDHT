@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.ServerSocket;
@@ -87,9 +86,7 @@ public class DHTNode extends Thread {
     @Override
     public void run() {
         try {
-            OutputStreamWriter ow = new OutputStreamWriter(socket.getOutputStream());
-            BufferedWriter out = new BufferedWriter(ow);
-            //PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String clientMessage;
             boolean inserting = false;
@@ -97,7 +94,7 @@ public class DHTNode extends Thread {
 
             while ((clientMessage = in.readLine()) != null) {
                 if (inserting) {
-                    File file = new File("/home/home/const/" + insertingKey + ".txt");
+                    File file = new File("/home/tcc10a/const/" + insertingKey + ".txt");
 
                     // if file doesnt exists, then create it
                     if (!file.exists()) {
@@ -115,14 +112,11 @@ public class DHTNode extends Thread {
                 }
                 System.out.println("Received: " + clientMessage);
                 if (clientMessage.contains("shutdown")) {
-                    out.write("goodbye\n");
-                    out.flush();
-                    out.close();
+                    out.println("goodbye");
                     System.exit(0);
                     break;
                 } else if (clientMessage.toLowerCase().equals("keyval")) {
-                    out.write(keyVal);
-                    out.flush();
+                    out.println(keyVal);
                     //break;
                 } else if (clientMessage.contains("article")) {
                     String request = clientMessage.substring(8);
@@ -133,9 +127,7 @@ public class DHTNode extends Thread {
                     System.out.println(key);
                     if (key > keyVal) {
                         System.out.println("Failed.");
-                        out.write("FAIL: " + nextNode);
-                        out.newLine();
-                        out.flush();
+                        out.println("FAIL: " + nextNode);
                         //continue;
                     } else {
                         System.out.println("It's ours!");
@@ -153,14 +145,9 @@ public class DHTNode extends Thread {
                                 break;
                             }
                             out.write(x);
-                            out.newLine();
-                            out.flush();
                         }
-                        fis.close();
-                        out.newLine();
-                        out.flush();
-                        //out = new PrintWriter(socket.getOutputStream(), true);
-                        //break;
+                        out.close();
+                        break;
                         //continue;
                     }
                 } else if (clientMessage.contains("insert")) {
@@ -172,22 +159,17 @@ public class DHTNode extends Thread {
                     System.out.println(key);
                     if (key > keyVal) {
                         System.out.println("Failed.");
-                        out.write("FAIL: " + nextNode);
-                        out.newLine();
-                        out.flush();
+                        out.println("FAIL: " + nextNode);
                         //continue;
                     } else {
                         System.out.println("It's ours!");
-                        out.write(key);
-                        out.newLine();
-                        out.flush();
+                        out.println(key);
                         insertingKey = key;
                         inserting = true;
                         //continue;
                     }
                 } else {
-                    out.write("Unrecognized command.");
-                    out.flush();
+                    out.println("Unrecognized command.");
                 }
             }
         } catch (IOException ex) {

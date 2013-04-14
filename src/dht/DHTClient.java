@@ -44,15 +44,30 @@ public class DHTClient {
 
         System.out.println("Attemping to connect to host " + serverHostname + " on port " + port);
 
+        while (connectLoop(serverHostname)) {
+            //Nothing to do here. 
+        }
+    }
+
+    public static boolean connectLoop(String serverHostname) {
         while (true) {
-            String next = connect(serverHostname);
-            if (next == null) {
+            System.out.println("Attemping to connect to host " + serverHostname + " on port " + port);
+            String next = null;
+            try {
+                next = connect(serverHostname);
+            } catch (IOException ex) {
+                Logger.getLogger(DHTClient.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (next.equals("SIGTERM")) {
+                return false;
+            } else if (next == null) {
                 break;
             }
             serverHostname = next;
         }
+        return true;
     }
-
+    
     public static String connect(String serverHostname) throws IOException {
         String nextHost = null;
         Socket echoSocket = null;
@@ -73,16 +88,26 @@ public class DHTClient {
         }
 
         BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-        String userInput;
+        String userInput = null;
 
         System.out.println("Type Message (\"quit\" to quit, \"shutdown\" to shutdown both the client and the server)");
-        while ((userInput = stdIn.readLine()) != null) {
+        while (lastRequest != null || ((userInput = stdIn.readLine()) != null)) {
+            //If there's a buffered request
+            if (lastRequest != null) {
+                //execute the request
+                out.println(lastRequest);
+                //reset the buffer
+                lastRequest = null;
+                
+                //reset to loop condition
+                continue;
+            }
             // send message to server
             out.println(userInput);
 
             // end loop
             if (userInput.equals("quit") || userInput.equals("shutdown")) {
-                break;
+                return "SIGTERM";
             }
 
             String output = in.readLine();
