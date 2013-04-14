@@ -145,10 +145,11 @@ public class DHTNode extends Thread {
                                 break;
                             }
                             out.write(x);
-                            out.flush();
+                            //out.flush();
                         }
-                        out.println();
-                        out.flush();
+                        //out.println();
+                        out.close();
+                        out = new PrintWriter(socket.getOutputStream(), true);
                         //break;
                         //continue;
                     }
