@@ -115,7 +115,7 @@ public class DHTNode extends Thread {
                 }
                 System.out.println("Received: " + clientMessage);
                 if (clientMessage.contains("shutdown")) {
-                    out.write("goodbye");
+                    out.write("goodbye\n");
                     out.flush();
                     out.close();
                     System.exit(0);
@@ -134,6 +134,7 @@ public class DHTNode extends Thread {
                     if (key > keyVal) {
                         System.out.println("Failed.");
                         out.write("FAIL: " + nextNode);
+                        out.newLine();
                         out.flush();
                         //continue;
                     } else {
@@ -152,10 +153,11 @@ public class DHTNode extends Thread {
                                 break;
                             }
                             out.write(x);
+                            out.newLine();
                             out.flush();
                         }
                         fis.close();
-                        //out.println();
+                        out.newLine();
                         out.flush();
                         //out = new PrintWriter(socket.getOutputStream(), true);
                         //break;
@@ -171,11 +173,13 @@ public class DHTNode extends Thread {
                     if (key > keyVal) {
                         System.out.println("Failed.");
                         out.write("FAIL: " + nextNode);
+                        out.newLine();
                         out.flush();
                         //continue;
                     } else {
                         System.out.println("It's ours!");
                         out.write(key);
+                        out.newLine();
                         out.flush();
                         insertingKey = key;
                         inserting = true;
