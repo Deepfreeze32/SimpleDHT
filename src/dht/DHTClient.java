@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 public class DHTClient {
 
     private static final int port = 1138;
+    private static String lastRequest;
 
     /**
      * @param args the command line arguments
@@ -37,7 +38,8 @@ public class DHTClient {
             System.err.println("Usage: <host>");
             System.exit(1);
         }
-
+        
+        lastRequest = null;
         String serverHostname = args[0];
 
         System.out.println("Attemping to connect to host " + serverHostname + " on port " + port);
@@ -89,6 +91,7 @@ public class DHTClient {
                 break;
             }
             if (userInput.contains("article")) {
+                lastRequest = userInput;
                 if (output.contains("FAIL:")) {
                     String node = output.substring(6);
                     System.out.println("Error: Try node: " + node);
