@@ -42,7 +42,7 @@ public class DHTClient {
         lastRequest = null;
         String serverHostname = args[0];
 
-        System.out.println("Attemping to connect to host " + serverHostname + " on port " + port);
+        //System.out.println("Attemping to connect to host " + serverHostname + " on port " + port);
 
         while (connectLoop(serverHostname)) {
             //Nothing to do here. 
@@ -58,11 +58,11 @@ public class DHTClient {
             } catch (IOException ex) {
                 Logger.getLogger(DHTClient.class.getName()).log(Level.SEVERE, null, ex);
             }
-            if (next.equals("SIGTERM")) {
-                return false;
-            } else if (next == null) {
+            if (next == null) {
                 break;
-            }
+            } else if (next.equals("SIGTERM")) {
+                return false;
+            } 
             serverHostname = next;
         }
         return true;
@@ -95,12 +95,9 @@ public class DHTClient {
             //If there's a buffered request
             if (lastRequest != null) {
                 //execute the request
-                out.println(lastRequest);
+                userInput = lastRequest;
                 //reset the buffer
                 lastRequest = null;
-                
-                //reset to loop condition
-                continue;
             }
             // send message to server
             out.println(userInput);
@@ -112,6 +109,8 @@ public class DHTClient {
 
             String output = in.readLine();
             if (output == null) {
+                //TODO Buffer request 
+                //lastRequest = userInput;
                 System.out.println("Null response recived. Terminating");
                 break;
             }
