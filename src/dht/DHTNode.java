@@ -233,7 +233,8 @@ public class DHTNode extends Thread {
                         fos.write(x);
                     }
                     fos.close();
-                    out.close();
+                    //out.close();
+                    in.close();
                     break;
                 } else {
                     out.println("Unrecognized command.");
