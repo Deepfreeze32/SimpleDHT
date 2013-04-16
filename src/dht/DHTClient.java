@@ -27,6 +27,8 @@ public class DHTClient {
 
     private static final int port = 1138;
     private static String lastRequest;
+    private static int lastKey;
+    private static boolean firstConn;
 
     /**
      * @param args the command line arguments
@@ -38,23 +40,71 @@ public class DHTClient {
             System.err.println("Usage: <host>");
             System.exit(1);
         }
-        
+        firstConn = true;
         lastRequest = null;
         String serverHostname = args[0];
 
         //System.out.println("Attemping to connect to host " + serverHostname + " on port " + port);
-
-        while (connectLoop(serverHostname)) {
+        String firstHost = getFirstHost(serverHostname);
+        while (connectLoop(firstHost)) {
             //Nothing to do here. 
         }
     }
 
-    public static boolean connectLoop(String serverHostname) {
+    public static String getFirstHost(String server) throws IOException {
+        String fName = null;
+        String nextHost = null;
+        nextHost = server;
+        int lowest = 10000;
+        boolean first = true;
+        while (true) {
+            
+            Socket echoSocket = null;
+            PrintWriter out = null;
+            BufferedReader in = null;
+
+            try {
+                echoSocket = new Socket(server, port);
+                out = new PrintWriter(echoSocket.getOutputStream(), true);
+                in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+            } catch (UnknownHostException e) {
+                System.err.println("Don't know about host: " + server);
+                System.exit(1);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.err.println("Couldn't get I/O for " + "the connection to: " + server);
+                System.exit(1);
+            }
+            out.println("keyval");
+            String output = in.readLine();
+            int currKey = Integer.parseInt(output);
+            if (first) {
+                first = false;
+                lowest = currKey;
+            } else if (currKey <= lowest) {
+                //lowest = currKey; 
+                break;
+            }
+            out.println("successor");
+            output = in.readLine();
+            nextHost = output;
+            
+            out.close();
+            in.close();
+            //stdIn.close();
+            echoSocket.close();
+            //return nextHost;
+        }
+        fName = nextHost;
+        return fName;
+    }
+
+    public static boolean connectLoop(String serverHostname, String... commands) {
         while (true) {
             System.out.println("Attemping to connect to host " + serverHostname + " on port " + port);
             String next = null;
             try {
-                next = connect(serverHostname);
+                next = connect(serverHostname, commands);
             } catch (IOException ex) {
                 Logger.getLogger(DHTClient.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -62,13 +112,13 @@ public class DHTClient {
                 break;
             } else if (next.equals("SIGTERM")) {
                 return false;
-            } 
+            }
             serverHostname = next;
         }
         return true;
     }
-    
-    public static String connect(String serverHostname) throws IOException {
+
+    public static String connect(String serverHostname, String... commands) throws IOException {
         String nextHost = null;
         Socket echoSocket = null;
         PrintWriter out = null;
@@ -117,6 +167,15 @@ public class DHTClient {
             if (userInput.contains("article")) {
                 lastRequest = userInput;
                 if (output.contains("FAIL:")) {
+                    out.println("keyval");
+                    int currKey = Integer.parseInt(in.readLine());
+                    if (firstConn) {
+                        lastKey = currKey;
+                        firstConn = false;
+                    } else {
+                        if (currKey == lastKey) {
+                        }
+                    }
                     String node = output.substring(6);
                     System.out.println("Error: Try node: " + node);
                     nextHost = node;
@@ -136,7 +195,7 @@ public class DHTClient {
                     }
                     fos.close();
                     System.out.println("Wrote to file article" + req + ".txt");
-                    System.out.println("Contents of file:\n"+readFile("article" + req + ".txt"));
+                    System.out.println("Contents of file:\n" + readFile("article" + req + ".txt"));
 
                     nextHost = null;
                 }

@@ -137,19 +137,26 @@ public class DHTNode extends Thread {
                         //String file = br.readLine();
                         String fname = "/home/tcc10a/const/" + key + ".txt";
                         System.out.println(fname);
-                        FileInputStream fis = new FileInputStream(fname);
-                        int x = 0;
-                        while (true) {
-                            x = fis.read();
-                            if (x == -1) {
-                                break;
+                        File f = new File(fname);
+                        if (f.exists()) {
+                            FileInputStream fis = new FileInputStream(fname);
+                            int x = 0;
+                            while (true) {
+                                x = fis.read();
+                                if (x == -1) {
+                                    break;
+                                }
+                                out.write(x);
                             }
-                            out.write(x);
+                        } else {
+                            out.println("File has not been inserted or is on a different node that has left the swarm.");
                         }
                         out.close();
                         break;
                         //continue;
                     }
+                } else if (clientMessage.contains("successor")) {
+                    out.println(nextNode);
                 } else if (clientMessage.contains("insert")) {
                     String request = clientMessage.substring(8);
                     //System.out.println(request);
