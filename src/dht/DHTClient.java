@@ -56,8 +56,7 @@ public class DHTClient {
     public static String getFirstHost(String server) throws IOException {
         String fName = null;
         String firstVisited = server;
-        String nextHost = null;
-        nextHost = server;
+        String nextHost = server;
         int lowest = 10000;
         boolean first = true;
         while (true) {
