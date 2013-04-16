@@ -28,6 +28,8 @@ public class DHTClient {
     private static final int port = 1138;
     private static String lastRequest;
     private static int lastKey;
+    private static int highestKey;
+    private static String highestHost;
     private static boolean firstConn;
 
     /**
@@ -88,6 +90,8 @@ public class DHTClient {
                 //lowest = currKey; 
                 break;
             }
+            highestKey = currKey;
+            highestHost = nextHost;
             out.println("successor");
             output = in.readLine();
             nextHost = output;
@@ -169,16 +173,14 @@ public class DHTClient {
             }
             if (userInput.contains("article")) {
                 lastRequest = userInput;
-                if (output.contains("FAIL:")) {
-                    out.println("keyval");
-                    int currKey = Integer.parseInt(in.readLine());
-                    if (firstConn) {
-                        lastKey = currKey;
-                        firstConn = false;
-                    } else {
-                        if (currKey == lastKey) {
-                        }
+                if (output.contains("FAIL:")) {     
+                    out.println("artkey "+userInput.substring(8));
+                    int assocKey = Integer.parseInt(in.readLine());
+                    
+                    if (assocKey > highestKey) {
+                        nextHost = highestHost;
                     }
+                    
                     String node = output.substring(6);
                     System.out.println("Error: Try node: " + node);
                     nextHost = node;
@@ -198,6 +200,43 @@ public class DHTClient {
                     }
                     fos.close();
                     System.out.println("Wrote to file article" + req + ".txt");
+                    System.out.println("Contents of file:\n" + readFile("article" + req + ".txt"));
+
+                    nextHost = null;
+                }
+            } else if (userInput.contains("insert")) {
+                lastRequest = userInput;
+                if (output.contains("FAIL:")) {                    
+                    out.println("artkey "+userInput.substring(8));
+                    int assocKey = Integer.parseInt(in.readLine());
+                    
+                    if (assocKey > highestKey) {
+                        nextHost = highestHost;
+                    }
+                    
+                    String node = output.substring(6);
+                    System.out.println("Error: Try node: " + node);
+                    nextHost = node;
+                    break;
+                } else {
+                    String request = userInput.substring(8);
+                    //System.out.println(request);
+                    int req = Integer.parseInt(request);
+                    File f = new File("article"+req+".txt");
+                    if (f.exists()) {
+                            FileInputStream fis = new FileInputStream(f);
+                            int x = 0;
+                            while (true) {
+                                x = fis.read();
+                                if (x == -1) {
+                                    break;
+                                }
+                                out.write(x);
+                            }
+                        } else {
+                            out.println("File does not exist.");
+                        }
+                    System.out.println("Wrote the file \"article" + req + ".txt\" to the server");
                     System.out.println("Contents of file:\n" + readFile("article" + req + ".txt"));
 
                     nextHost = null;

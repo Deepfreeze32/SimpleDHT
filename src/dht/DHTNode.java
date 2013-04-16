@@ -9,6 +9,7 @@ import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class DHTNode extends Thread {
 
     private static String self;
     private static String nextNode;
-    private static final int port = 1138;
+    //private static final int port = 1138;
     private static int keyVal;
     private static Properties keylist;
     public static final int PORT_NUMBER = 1138;
@@ -101,10 +102,16 @@ public class DHTNode extends Thread {
                         file.createNewFile();
                     }
 
-                    FileWriter fw = new FileWriter(file.getAbsoluteFile());
-                    BufferedWriter bw = new BufferedWriter(fw);
-                    bw.write(clientMessage);
-                    bw.close();
+                    FileOutputStream fos = new FileOutputStream(file);
+                    int x = 0;
+                    while (true) {
+                        x = in.read();
+                        if (x == -1) {
+                            break;
+                        }
+                        fos.write(x);
+                    }
+                    fos.close();
 
                     inserting = false;
                     insertingKey = 0;
@@ -157,6 +164,13 @@ public class DHTNode extends Thread {
                     }
                 } else if (clientMessage.contains("successor")) {
                     out.println(nextNode);
+                } else if (clientMessage.contains("artkey")) {
+                    String request = clientMessage.substring(7);
+                    //System.out.println(request);
+                    int req = Integer.parseInt(request);
+                    //System.out.println(req);
+                    int key = Integer.parseInt(keylist.getProperty("" + req));
+                    out.println(key);
                 } else if (clientMessage.contains("insert")) {
                     String request = clientMessage.substring(8);
                     //System.out.println(request);
@@ -171,9 +185,12 @@ public class DHTNode extends Thread {
                     } else {
                         System.out.println("It's ours!");
                         out.println(key);
-                        insertingKey = key;
-                        inserting = true;
-                        //continue;
+                        File f = new File("/home/tcc10a/const/"+key+".txt");
+                        if (!f.exists()) {
+                            insertingKey = key;
+                            inserting = true;
+                            //continue;
+                        }
                     }
                 } else {
                     out.println("Unrecognized command.");
