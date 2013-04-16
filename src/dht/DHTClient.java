@@ -53,6 +53,7 @@ public class DHTClient {
 
     public static String getFirstHost(String server) throws IOException {
         String fName = null;
+        String firstVisited = server;
         String nextHost = null;
         nextHost = server;
         int lowest = 10000;
@@ -64,7 +65,7 @@ public class DHTClient {
             BufferedReader in = null;
 
             try {
-                echoSocket = new Socket(server, port);
+                echoSocket = new Socket(nextHost, port);
                 out = new PrintWriter(echoSocket.getOutputStream(), true);
                 in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
             } catch (UnknownHostException e) {
@@ -78,10 +79,12 @@ public class DHTClient {
             out.println("keyval");
             String output = in.readLine();
             int currKey = Integer.parseInt(output);
+            //System.out.println(currKey);
+            //System.out.println(lowest);
             if (first) {
                 first = false;
                 lowest = currKey;
-            } else if (currKey <= lowest) {
+            } else if (currKey < lowest || (nextHost.equals(firstVisited) && !first)) {
                 //lowest = currKey; 
                 break;
             }
