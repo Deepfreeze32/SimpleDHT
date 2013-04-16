@@ -39,7 +39,7 @@ public class DHTNode extends Thread {
     //private static final int port = 1138;
     private static int keyVal;
     private static Properties keylist;
-    public static final int PORT_NUMBER = 1138;
+    public static final int PORT_NUMBER = 11380;
     protected Socket socket;
 
     public static void main(String[] args) {

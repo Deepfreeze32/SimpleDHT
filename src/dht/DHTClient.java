@@ -25,7 +25,7 @@ import java.util.logging.Logger;
  */
 public class DHTClient {
 
-    private static final int port = 1138;
+    private static final int port = 11380;
     private static String lastRequest;
     private static int lastKey;
     private static int highestKey;
