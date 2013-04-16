@@ -171,9 +171,10 @@ public class DHTClient {
                 break;
             }
             if (userInput.contains("article")) {
-                lastRequest = userInput;
-                if (output.contains("FAIL:")) {     
-                    out.println("artkey "+userInput.substring(7));
+                
+                if (output.contains("FAIL:")) {   
+                    lastRequest = userInput;
+                    out.println("artkey "+userInput.substring(8));
                     int assocKey = Integer.parseInt(in.readLine());
                     
                     if (assocKey > highestKey) {
@@ -185,7 +186,7 @@ public class DHTClient {
                     nextHost = node;
                     break;
                 } else {
-                    String request = userInput.substring(7);
+                    String request = userInput.substring(8);
                     //System.out.println(request);
                     int req = Integer.parseInt(request);
                     FileOutputStream fos = new FileOutputStream("article" + req + ".txt");
@@ -200,7 +201,7 @@ public class DHTClient {
                     fos.close();
                     System.out.println("Wrote to file article" + req + ".txt");
                     System.out.println("Contents of file:\n" + readFile("article" + req + ".txt"));
-
+                    out.close();
                     nextHost = null;
                     break;
                 }
@@ -208,8 +209,13 @@ public class DHTClient {
                 
                 if (output.contains("FAIL:")) {       
                     lastRequest = userInput;
-                    out.println("artkey "+userInput.substring(7));
-                    int assocKey = Integer.parseInt(in.readLine());
+                    //System.out.println(userInput.substring(7));
+                    String com = "artkey "+userInput.substring(7);
+                    System.out.println(com);
+                    out.println(com);
+                    String ret = in.readLine();
+                    System.out.println(ret);
+                    int assocKey = Integer.parseInt(ret);
                     
                     if (assocKey > highestKey) {
                         nextHost = highestHost;
