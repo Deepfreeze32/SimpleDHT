@@ -178,6 +178,8 @@ public class DHTNode extends Thread {
                         }
                         fos.close();
                     }
+                    out.close();
+                    break;
                 } else if (clientMessage.contains("farticle")) {
                     String request = clientMessage.substring(9);
                     //System.out.println(request);
@@ -235,6 +237,8 @@ public class DHTNode extends Thread {
                 } else {
                     out.println("Unrecognized command.");
                 }
+                out.close();
+                break;
             }
         } catch (IOException ex) {
             ex.printStackTrace();
