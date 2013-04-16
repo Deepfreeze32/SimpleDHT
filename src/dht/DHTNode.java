@@ -178,7 +178,7 @@ public class DHTNode extends Thread {
                         }
                         fos.close();
                     }
-                    out.close();
+                    in.close();
                     break;
                 } else if (clientMessage.contains("farticle")) {
                     String request = clientMessage.substring(9);

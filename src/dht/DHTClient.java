@@ -205,8 +205,9 @@ public class DHTClient {
                     break;
                 }
             } else if (userInput.contains("insert")) {
-                lastRequest = userInput;
-                if (output.contains("FAIL:")) {                    
+                
+                if (output.contains("FAIL:")) {       
+                    lastRequest = userInput;
                     out.println("artkey "+userInput.substring(7));
                     int assocKey = Integer.parseInt(in.readLine());
                     
@@ -224,18 +225,18 @@ public class DHTClient {
                     int req = Integer.parseInt(request);
                     File f = new File("article"+req+".txt");
                     if (f.exists()) {
-                            FileInputStream fis = new FileInputStream(f);
-                            int x = 0;
-                            while (true) {
-                                x = fis.read();
-                                if (x == -1) {
-                                    break;
-                                }
-                                out.write(x);
+                        FileInputStream fis = new FileInputStream(f);
+                        int x = 0;
+                        while (true) {
+                            x = fis.read();
+                            if (x == -1) {
+                                break;
                             }
-                        } else {
-                            out.println("File does not exist.");
+                            out.write(x);
                         }
+                    } else {
+                        out.println("File does not exist.");
+                    }
                     System.out.println("Wrote the file \"article" + req + ".txt\" to the server");
                     System.out.println("Contents of file:\n" + readFile("article" + req + ".txt"));
 
