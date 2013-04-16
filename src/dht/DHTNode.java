@@ -90,33 +90,8 @@ public class DHTNode extends Thread {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String clientMessage;
-            boolean inserting = false;
-            int insertingKey = 0;
 
             while ((clientMessage = in.readLine()) != null) {
-                if (inserting) {
-                    File file = new File("/home/tcc10a/const/" + insertingKey + ".txt");
-
-                    // if file doesnt exists, then create it
-                    if (!file.exists()) {
-                        file.createNewFile();
-                    }
-
-                    FileOutputStream fos = new FileOutputStream(file);
-                    int x = 0;
-                    while (true) {
-                        x = in.read();
-                        if (x == -1) {
-                            break;
-                        }
-                        fos.write(x);
-                    }
-                    fos.close();
-
-                    inserting = false;
-                    insertingKey = 0;
-                    continue;
-                }
                 System.out.println("Received: " + clientMessage);
                 if (clientMessage.contains("shutdown")) {
                     out.println("goodbye");
@@ -185,12 +160,23 @@ public class DHTNode extends Thread {
                     } else {
                         System.out.println("It's ours!");
                         out.println(key);
-                        File f = new File("/home/tcc10a/const/"+key+".txt");
-                        if (!f.exists()) {
-                            insertingKey = key;
-                            inserting = true;
-                            //continue;
+                        File file = new File("/home/tcc10a/const/" + key + ".txt");
+
+                        // if file doesnt exists, then create it
+                        if (!file.exists()) {
+                            file.createNewFile();
                         }
+
+                        FileOutputStream fos = new FileOutputStream(file, false);
+                        int x = 0;
+                        while (true) {
+                            x = in.read();
+                            if (x == -1) {
+                                break;
+                            }
+                            fos.write(x);
+                        }
+                        fos.close();
                     }
                 } else if (clientMessage.contains("farticle")) {
                     String request = clientMessage.substring(9);
@@ -199,7 +185,7 @@ public class DHTNode extends Thread {
                     //System.out.println(req);
                     int key = Integer.parseInt(keylist.getProperty("" + req));
                     System.out.println(key);
-                    
+
                     String fname = "/home/tcc10a/const/" + key + ".txt";
                     System.out.println(fname);
                     File f = new File(fname);
@@ -226,15 +212,26 @@ public class DHTNode extends Thread {
                     int req = Integer.parseInt(request);
                     //System.out.println(req);
                     int key = Integer.parseInt(keylist.getProperty("" + req));
-                    
+
                     out.println(key);
-                    File f = new File("/home/tcc10a/const/"+key+".txt");
-                    if (!f.exists()) {
-                        insertingKey = key;
-                        inserting = true;
-                        //continue;
+                    File file = new File("/home/tcc10a/const/" + key + ".txt");
+
+                    // if file doesnt exists, then create it
+                    if (!file.exists()) {
+                        file.createNewFile();
                     }
-                    
+
+                    FileOutputStream fos = new FileOutputStream(file, false);
+                    int x = 0;
+                    while (true) {
+                        x = in.read();
+                        if (x == -1) {
+                            break;
+                        }
+                        fos.write(x);
+                    }
+                    fos.close();
+
                 } else {
                     out.println("Unrecognized command.");
                 }

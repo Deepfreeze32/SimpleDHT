@@ -174,7 +174,7 @@ public class DHTClient {
             if (userInput.contains("article")) {
                 lastRequest = userInput;
                 if (output.contains("FAIL:")) {     
-                    out.println("artkey "+userInput.substring(8));
+                    out.println("artkey "+userInput.substring(7));
                     int assocKey = Integer.parseInt(in.readLine());
                     
                     if (assocKey > highestKey) {
@@ -186,7 +186,7 @@ public class DHTClient {
                     nextHost = node;
                     break;
                 } else {
-                    String request = userInput.substring(8);
+                    String request = userInput.substring(7);
                     //System.out.println(request);
                     int req = Integer.parseInt(request);
                     FileOutputStream fos = new FileOutputStream("article" + req + ".txt");
@@ -203,11 +203,12 @@ public class DHTClient {
                     System.out.println("Contents of file:\n" + readFile("article" + req + ".txt"));
 
                     nextHost = null;
+                    break;
                 }
             } else if (userInput.contains("insert")) {
                 lastRequest = userInput;
                 if (output.contains("FAIL:")) {                    
-                    out.println("artkey "+userInput.substring(8));
+                    out.println("artkey "+userInput.substring(7));
                     int assocKey = Integer.parseInt(in.readLine());
                     
                     if (assocKey > highestKey) {
@@ -219,7 +220,7 @@ public class DHTClient {
                     nextHost = node;
                     break;
                 } else {
-                    String request = userInput.substring(8);
+                    String request = userInput.substring(7);
                     //System.out.println(request);
                     int req = Integer.parseInt(request);
                     File f = new File("article"+req+".txt");
@@ -240,6 +241,7 @@ public class DHTClient {
                     System.out.println("Contents of file:\n" + readFile("article" + req + ".txt"));
 
                     nextHost = null;
+                    break;
                 }
             } else {
                 System.out.println("Response: " + output);
