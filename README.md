@@ -1,9 +1,11 @@
-# Project Introduction #
+Project Introduction
+====================
 
 This is a simple DHT implementation created for CS 420: Networks and Distributed Systems.  
 This DHT was originally meant to lookup articles of the US Constitution. 
 
-## File descriptions ##
+File descriptions
+-----------------
   
 There are two main files in this project. The first is DHTNode.java.  
 This is a node for the DHT. It accepts some commands, and responds accordingly. If the  
@@ -25,7 +27,8 @@ keylist.properties is a file every server must have. It contains the articles of
 constitution and their appropriate key. For example: `1=234` says that article 1 hashes to  
 a key of 234.  
 
-## DHT Commands ##
+DHT Commands
+------------
 
 Valid DHT commands are:  
 * quit (Shuts down the client)
