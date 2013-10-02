@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package dht;
 
 import java.io.BufferedReader;
@@ -29,8 +25,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author tcc10a
+ * This is a node for the DHT. It accepts some commands, and responds accordingly.
+ * If the file requested hashes to a value greater than this node's key value, it 
+ * returns the IP address of the next server in the DHT. If it hashes to the correct
+ * value but the file does not exist, it says that file is not in the DHT or has 
+ * been removed. If it does exist, it returns the text of the file.
+ * @author Deepfreeze32
  */
 public class DHTNode extends Thread {
 
@@ -67,8 +67,8 @@ public class DHTNode extends Thread {
         this.socket = socket;
         Properties prop = new Properties();
         keylist = new Properties();
-        prop.load(new FileInputStream("/home/tcc10a/props/config.properties"));
-        keylist.load(new FileInputStream("/home/tcc10a/props/keylist.properties"));
+        prop.load(new FileInputStream("props/config.properties"));
+        keylist.load(new FileInputStream("props/keylist.properties"));
         try {
             self = java.net.InetAddress.getLocalHost().getHostName();
             nextNode = prop.getProperty("NEXT");
@@ -97,9 +97,11 @@ public class DHTNode extends Thread {
                     out.println("goodbye");
                     System.exit(0);
                     break;
+				//They want to know our key.	
                 } else if (clientMessage.toLowerCase().equals("keyval")) {
                     out.println(keyVal);
-                    //break;
+                    //break; 
+				//Retrieve the article.
                 } else if (clientMessage.contains("article")) {
                     String request = clientMessage.substring(8);
                     //System.out.println(request);
@@ -117,7 +119,7 @@ public class DHTNode extends Thread {
                         //Get file info...somehow
                         //BufferedReader br = new BufferedReader(new FileReader("/home/dht/const/" + key + ".txt"));
                         //String file = br.readLine();
-                        String fname = "/home/tcc10a/const/" + key + ".txt";
+                        String fname = "const/" + key + ".txt";
                         System.out.println(fname);
                         File f = new File(fname);
                         if (f.exists()) {
@@ -137,8 +139,10 @@ public class DHTNode extends Thread {
                         break;
                         //continue;
                     }
+				//Get the successor node. 
                 } else if (clientMessage.contains("successor")) {
                     out.println(nextNode);
+				//Get the key of the article number
                 } else if (clientMessage.contains("artkey")) {
                     String request = clientMessage.substring(7);
                     System.out.println(request);
@@ -146,6 +150,7 @@ public class DHTNode extends Thread {
                     //System.out.println(req);
                     int key = Integer.parseInt(keylist.getProperty("" + req));
                     out.println(key);
+				//Insert an article.
                 } else if (clientMessage.contains("insert")) {
                     String request = clientMessage.substring(7);
                     //System.out.println(request);
@@ -160,7 +165,7 @@ public class DHTNode extends Thread {
                     } else {
                         System.out.println("It's ours!");
                         out.println(key);
-                        File file = new File("/home/tcc10a/const/" + key + ".txt");
+                        File file = new File("const/" + key + ".txt");
 
                         // if file doesnt exists, then create it
                         if (!file.exists()) {
@@ -188,7 +193,7 @@ public class DHTNode extends Thread {
                     int key = Integer.parseInt(keylist.getProperty("" + req));
                     System.out.println(key);
 
-                    String fname = "/home/tcc10a/const/" + key + ".txt";
+                    String fname = "const/" + key + ".txt";
                     System.out.println(fname);
                     File f = new File(fname);
                     if (f.exists()) {
@@ -216,7 +221,7 @@ public class DHTNode extends Thread {
                     int key = Integer.parseInt(keylist.getProperty("" + req));
 
                     out.println(key);
-                    File file = new File("/home/tcc10a/const/" + key + ".txt");
+                    File file = new File("const/" + key + ".txt");
 
                     // if file doesnt exists, then create it
                     if (!file.exists()) {

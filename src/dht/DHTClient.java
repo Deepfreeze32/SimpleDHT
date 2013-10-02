@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package dht;
 
 import java.io.BufferedReader;
@@ -20,8 +16,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author tcc10a
+ * The client for the DHT. It connects to the specified node in the DHT. 
+ * To use the client, start it with the command line parameter consisting
+ * of the hostname of a node in the DHT. 
+ * <p>
+ * For valid commands, please see README. 
+ * @author Deepfreeze32
  */
 public class DHTClient {
 
