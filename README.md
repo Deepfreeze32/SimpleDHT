@@ -1,8 +1,9 @@
 Project Introduction
 ====================
 
-This is a simple DHT implementation created for CS 420: Networks and Distributed Systems.  
-This DHT was originally meant to lookup articles of the US Constitution. 
+This is a simple Distributed Hash Table (DHT) implementation created for CS 420: Networks and Distributed Systems.  
+This DHT was originally meant to lookup articles of the US Constitution. It does not  
+actually hash at this point in time, it assumes the hashing was done in advance.
 
 File descriptions
 -----------------
