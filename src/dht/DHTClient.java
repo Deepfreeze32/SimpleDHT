@@ -36,7 +36,7 @@ public class DHTClient {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
-        // TODO code application logic here
+        // TODO add better error handling
 
         if (args.length != 1) {
             System.err.println("Usage: <host>");
@@ -46,7 +46,6 @@ public class DHTClient {
         lastRequest = null;
         String serverHostname = args[0];
 
-        //System.out.println("Attemping to connect to host " + serverHostname + " on port " + port);
         String firstHost = getFirstHost(serverHostname);
         while (connectLoop(firstHost)) {
             //Nothing to do here. 
@@ -80,13 +79,11 @@ public class DHTClient {
             out.println("keyval");
             String output = in.readLine();
             int currKey = Integer.parseInt(output);
-            //System.out.println(currKey);
-            //System.out.println(lowest);
+            
             if (first) {
                 first = false;
                 lowest = currKey;
             } else if (currKey < lowest || (nextHost.equals(firstVisited) && !first)) {
-                //lowest = currKey; 
                 break;
             }
             highestKey = currKey;
@@ -97,9 +94,7 @@ public class DHTClient {
             
             out.close();
             in.close();
-            //stdIn.close();
             echoSocket.close();
-            //return nextHost;
         }
         fName = nextHost;
         return fName;
@@ -166,7 +161,6 @@ public class DHTClient {
             String output = in.readLine();
             if (output == null) {
                 //TODO Buffer request 
-                //lastRequest = userInput;
                 System.out.println("Null response recived. Terminating");
                 break;
             }
@@ -187,7 +181,6 @@ public class DHTClient {
                     break;
                 } else {
                     String request = userInput.substring(8);
-                    //System.out.println(request);
                     int req = Integer.parseInt(request);
                     FileOutputStream fos = new FileOutputStream("article" + req + ".txt");
                     int x = 0;
@@ -209,7 +202,6 @@ public class DHTClient {
                 
                 if (output.contains("FAIL:")) {       
                     lastRequest = userInput;
-                    //System.out.println(userInput.substring(7));
                     String com = "artkey "+userInput.substring(7);
                     System.out.println(com);
                     out.println(com);
@@ -227,7 +219,6 @@ public class DHTClient {
                     break;
                 } else {
                     String request = userInput.substring(7);
-                    //System.out.println(request);
                     int req = Integer.parseInt(request);
                     File f = new File("article"+req+".txt");
                     if (f.exists()) {
@@ -256,7 +247,6 @@ public class DHTClient {
 
         out.close();
         in.close();
-        //stdIn.close();
         echoSocket.close();
         return nextHost;
     }
