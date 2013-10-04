@@ -36,7 +36,6 @@ public class DHTNode extends Thread {
 
     private static String self;
     private static String nextNode;
-    //private static final int port = 1138;
     private static int keyVal;
     private static Properties keylist;
     public static final int PORT_NUMBER = 1138;
@@ -59,6 +58,7 @@ public class DHTNode extends Thread {
             } catch (IOException ex) {
                 // not much can be done: log the error
                 // exits since this is the end of main
+                ex.printStackTrace();
             }
         }
     }
@@ -97,28 +97,22 @@ public class DHTNode extends Thread {
                     out.println("goodbye");
                     System.exit(0);
                     break;
-				//They want to know our key.	
+		//They want to know our key.	
                 } else if (clientMessage.toLowerCase().equals("keyval")) {
                     out.println(keyVal);
-                    //break; 
-				//Retrieve the article.
+		//Retrieve the article.
                 } else if (clientMessage.contains("article")) {
                     String request = clientMessage.substring(8);
-                    //System.out.println(request);
                     int req = Integer.parseInt(request);
-                    //System.out.println(req);
                     int key = Integer.parseInt(keylist.getProperty("" + req));
                     System.out.println(key);
                     if (key > keyVal) {
                         System.out.println("Failed.");
                         out.println("FAIL: " + nextNode);
-                        //continue;
                     } else {
                         System.out.println("It's ours!");
-                        //out.println(key);
-                        //Get file info...somehow
-                        //BufferedReader br = new BufferedReader(new FileReader("/home/dht/const/" + key + ".txt"));
-                        //String file = br.readLine();
+                     
+                        //Get file info
                         String fname = "const/" + key + ".txt";
                         System.out.println(fname);
                         File f = new File(fname);
@@ -137,31 +131,26 @@ public class DHTNode extends Thread {
                         }
                         out.close();
                         break;
-                        //continue;
                     }
-				//Get the successor node. 
+		//Get the successor node. 
                 } else if (clientMessage.contains("successor")) {
                     out.println(nextNode);
-				//Get the key of the article number
+		//Get the key of the article number
                 } else if (clientMessage.contains("artkey")) {
                     String request = clientMessage.substring(7);
                     System.out.println(request);
                     int req = Integer.parseInt(request);
-                    //System.out.println(req);
                     int key = Integer.parseInt(keylist.getProperty("" + req));
                     out.println(key);
-				//Insert an article.
+		//Insert an article.
                 } else if (clientMessage.contains("insert")) {
                     String request = clientMessage.substring(7);
-                    //System.out.println(request);
                     int req = Integer.parseInt(request);
-                    //System.out.println(req);
                     int key = Integer.parseInt(keylist.getProperty("" + req));
                     System.out.println(key);
                     if (key > keyVal) {
                         System.out.println("Failed.");
                         out.println("FAIL: " + nextNode);
-                        //continue;
                     } else {
                         System.out.println("It's ours!");
                         out.println(key);
@@ -187,9 +176,7 @@ public class DHTNode extends Thread {
                     break;
                 } else if (clientMessage.contains("farticle")) {
                     String request = clientMessage.substring(9);
-                    //System.out.println(request);
                     int req = Integer.parseInt(request);
-                    //System.out.println(req);
                     int key = Integer.parseInt(keylist.getProperty("" + req));
                     System.out.println(key);
 
@@ -215,9 +202,7 @@ public class DHTNode extends Thread {
 
                 } else if (clientMessage.contains("finsert")) {
                     String request = clientMessage.substring(8);
-                    //System.out.println(request);
                     int req = Integer.parseInt(request);
-                    //System.out.println(req);
                     int key = Integer.parseInt(keylist.getProperty("" + req));
 
                     out.println(key);
@@ -238,7 +223,6 @@ public class DHTNode extends Thread {
                         fos.write(x);
                     }
                     fos.close();
-                    //out.close();
                     in.close();
                     break;
                 } else {
